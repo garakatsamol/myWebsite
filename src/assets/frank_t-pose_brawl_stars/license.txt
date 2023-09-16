@@ -1,0 +1,11 @@
+Model Information:
+* title:	Frank t-pose Brawl Stars
+* source:	https://sketchfab.com/3d-models/frank-t-pose-brawl-stars-371c56daf68f4c798dddd3593e446f1d
+* author:	shertiku (https://sketchfab.com/shertiku)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Frank t-pose Brawl Stars" (https://sketchfab.com/3d-models/frank-t-pose-brawl-stars-371c56daf68f4c798dddd3593e446f1d) by shertiku (https://sketchfab.com/shertiku) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
