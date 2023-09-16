@@ -71,7 +71,7 @@ const knight1 = knight.clone();
         ref="knightRef1"
         :object="knight1"
         :key="'instance2'"
-        :scale="2"
+        :scale="1"
         :position="[1, 2, -2]"
       ></primitive>
     </TresGroup>
