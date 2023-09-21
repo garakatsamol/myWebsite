@@ -41,7 +41,7 @@ currentAction2.play()
 let currentColor='#FFFFFF'
 const onClick = (intersection, pointerEvent) => {
  let newColor=currentColor=='#FFFFFF'?'#008080':'#FFFFFF'
- // console.log('click', intersection, pointerEvent);
+  console.log('click', intersection, pointerEvent);
  
   console.log('click', newColor);
   intersection.object.material.color.set(newColor)
