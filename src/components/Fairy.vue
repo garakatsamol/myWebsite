@@ -21,7 +21,7 @@ const fairy = nodes['RootNode'];
 
 const fairy1 = clone(fairy);
 
-console.log("fairy",fairy)
+console.log("fairy", fairy)
 const fairyAnim = animations[0]
 const fairyAnim1 = animations[0]
 
@@ -38,18 +38,27 @@ console.log(fairyAnim, fairyAnim1);
 currentAction1.play()
 mixer1.timeScale = .5
 currentAction2.play()
+let currentColor='#FFFFFF'
+const onClick = (intersection, pointerEvent) => {
+ let newColor=currentColor=='#FFFFFF'?'#008080':'#FFFFFF'
+ // console.log('click', intersection, pointerEvent);
+ 
+  console.log('click', newColor);
+  intersection.object.material.color.set(newColor)
+  currentColor=newColor
 
-const onClick = (intersection, pointerEvent) => console.log('click', intersection, pointerEvent);
+}
 
 
 </script>
 
 <template>
-<primitive
-  @click="onClick"
-  :object="fairy" 
-  :position="[-2, 2, 0]" 
-  :scale="[0.2, 0.2, 0.2]" />
+  <primitive @click="onClick" :object="fairy" :position="[-2, 2, 0]" :scale="[0.2, 0.2, 0.2]" />
 
   <primitive :object="fairy1" :position="[2, 3, -1]" :scale="[0.2, 0.2, 0.2]" />
+
+  <TresMesh @click="onClick">
+    <TresBoxGeometry :args="[1, 1, 1]" />
+    <TresMeshToonMaterial color="#efefef" />
+  </TresMesh>
 </template>
