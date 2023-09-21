@@ -45,7 +45,8 @@ const onClick = (intersection, pointerEvent) => console.log('click', intersectio
 </script>
 
 <template>
-
+<primitive
+  @click="onClick"
   :object="fairy" 
   :position="[-2, 2, 0]" 
   :scale="[0.2, 0.2, 0.2]" />
