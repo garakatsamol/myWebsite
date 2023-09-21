@@ -62,11 +62,21 @@ watchEffect(() => {
     <TresPerspectiveCamera ref="cameraRef" :position="[0, 3, 10]" />
     <!-- <OrbitControls /> -->
 
-    <TresGroup :position="[0, 0, 0]">
-      <Suspense>
-        <Fairy />
-      </Suspense>
-   
+    <TresGroup :position="0">
+      <primitive
+        ref="knightRef"
+        :object="knight"
+        :key="'instance1'"
+        :scale="1"
+        :position="[0, 5, -2]"
+      ></primitive>
+      <primitive
+        ref="knightRef1"
+        :object="knight1"
+        :key="'instance2'"
+        :scale="2"
+        :position="[1, 2, -2]"
+      ></primitive>
     </TresGroup>
     <TresAmbientLight :intensity="1" :color="0xffffff" />
 
