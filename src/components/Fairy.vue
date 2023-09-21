@@ -38,7 +38,7 @@ console.log(fairyAnim, fairyAnim1);
 currentAction1.play()
 mixer1.timeScale = .5
 currentAction2.play()
-let currentColor='#FFFFFF'
+let currentColor='#008080'
 const onClick = (intersection, pointerEvent) => {
  let newColor=currentColor=='#FFFFFF'?'#008080':'#FFFFFF'
   console.log('click', intersection, pointerEvent);
@@ -59,6 +59,6 @@ const onClick = (intersection, pointerEvent) => {
 
   <TresMesh @click="onClick">
     <TresBoxGeometry :args="[1, 1, 1]" />
-    <TresMeshToonMaterial color="#efefef" />
+    <TresMeshToonMaterial color="#008080" />
   </TresMesh>
 </template>
