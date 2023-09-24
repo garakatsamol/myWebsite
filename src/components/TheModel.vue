@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { Ref, onMounted, ref, watch, watchEffect } from 'vue';
-import { TresCanvas, useRenderLoop, useTexture,  } from '@tresjs/core';
-import { reactive, shallowRef,  } from 'vue';
+import { TresCanvas, useRenderLoop, useTexture, } from '@tresjs/core';
+import { reactive, shallowRef, } from 'vue';
 //import Fairy from './Fairy.vue';
 import SingleFairy from './SingleFairy.vue';
 import {
   OrbitControls,
   MouseParallax,
-  
+
   useTweakPane,
   useGLTF,
   useAnimations,
@@ -21,11 +21,11 @@ const state = reactive({
   alpha: false,
 
 });
-const cameraRef=shallowRef<PerspectiveCamera>()
+const cameraRef = shallowRef<PerspectiveCamera>()
 const orbitRef = ref(null);
-
+let menuClicked = false
 const cameraPosition = { x: 0, y: 0, z: -0 };
-
+const cameraIdlePosition = [0, 0, 10]
 watchEffect(() => {
   if (cameraRef.value) {
     const position = cameraRef.value.position;
@@ -43,17 +43,21 @@ const {
   draco: true,
 });
 
-const moveCamera=( fairyPosition:Vector3)=>{
-console.log(fairyPosition)
-gsap.to(cameraRef.value.position,
-{x:fairyPosition[0],
-  y:fairyPosition[1],
-  z:fairyPosition[2]+4,
-  
-}
+const moveCamera = (fairyPosition: Vector3) => {
 
-)
+  let newCameraPosition = menuClicked ? cameraIdlePosition : fairyPosition
+  let cameraOffset = menuClicked ? 0 : 4
 
+  gsap.to(cameraRef.value.position,
+    {
+      x: newCameraPosition[0],
+      y: newCameraPosition[1],
+      z: newCameraPosition[2] + cameraOffset,
+
+    }
+
+  )
+  menuClicked = !menuClicked
 }
 
 </script>
@@ -62,29 +66,25 @@ gsap.to(cameraRef.value.position,
   <TresCanvas ref="canvasRef" preset="realistic" v-bind="state">
     <MouseParallax :ease="1" :factor="1" />
 
-    <TresPerspectiveCamera ref="cameraRef" :position="[0, 0, 10]" />
- <!--    <OrbitControls ref="orbitRef" /> -->
+    <TresPerspectiveCamera ref="cameraRef" :position="cameraIdlePosition" />
+    <!--    <OrbitControls ref="orbitRef" /> -->
 
     <TresGroup :position="[0, 0, 0]">
       <Stars />
       <Suspense>
-        <SingleFairy 
-        :fairyNodes="nodes" 
-        :fairyScene="knight" 
-        :fairyAnimations="animations" 
-        :fairyPosition="[0, 3, 1]" 
-        @fairyClicked=moveCamera
-        
-        />
+        <SingleFairy :fairyNodes="nodes" :fairyScene="knight" :fairyAnimations="animations" :fairyPosition="[0, 3, 1]"
+          @fairyClicked=moveCamera />
 
 
       </Suspense>
       <Suspense>
-        <SingleFairy @fairyClicked=moveCamera :fairyNodes="nodes" :fairyScene="knight" :fairyAnimations="animations" :fairyPosition="[-2, -3, -0]" />
+        <SingleFairy @fairyClicked=moveCamera :fairyNodes="nodes" :fairyScene="knight" :fairyAnimations="animations"
+          :fairyPosition="[-2, -3, -0]" />
 
       </Suspense>
       <Suspense>
-        <SingleFairy @fairyClicked=moveCamera :fairyNodes="nodes" :fairyScene="knight" :fairyAnimations="animations" :fairyPosition="[2, 1, -1]" />
+        <SingleFairy @fairyClicked=moveCamera :fairyNodes="nodes" :fairyScene="knight" :fairyAnimations="animations"
+          :fairyPosition="[2, 1, -1]" />
       </Suspense>
 
     </TresGroup>
