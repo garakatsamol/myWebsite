@@ -1,26 +1,45 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { useTresContext, useRaycaster } from '@tresjs/core';
-import { Sphere, useAnimations } from '@tresjs/cientos';
+import { useTresContext, useRaycaster,useTexture } from '@tresjs/core';
 import { clone } from 'three/examples/jsm/utils/SkeletonUtils.js';
+import { useAnimations, Sphere } from '@tresjs/cientos';
+import { PointsMaterial, PointsMaterialParameters } from 'three/src/materials/PointsMaterial.js';
+import { Points } from 'three/src/objects/Points.js';
 
 const context = useTresContext();
-const { fairyNodes, fairyScene, fairyAnimations, fairyPosition } = defineProps([
+const { fairyNodes, fairyScene, fairyAnimations, fairyMaterials, fairyPosition } = defineProps([
   'fairyNodes',
   'fairyScene',
   'fairyAnimations',
+  'fairyMaterials',
   'fairyPosition',
 ]);
 
 const fairy = clone(fairyNodes['RootNode']);
 const fairyRef = ref(null);
+const pointsRef = ref(null);
 
 const sphereRef = ref(null);
 const emit = defineEmits(['fairyClicked']);
+const pMaterial = new PointsMaterial( { color: "#ff0000", opacity:0.5, transparent:true, size:0.5, sizeAttenuation:false, vertexColors:true })
 
+const points = new Points();
 onMounted(() => {
-  sphereRef.value.value.material.visible = false;
+  if (sphereRef.value) {
+  sphereRef.value.value.material.visible = true;
+}
+
+points.material = pMaterial;
+
+if (fairy.geometry) {
+  points.geometry = fairy.geometry;
+}
+
+pointsRef.value = points;
+
+
 });
+
 const fairyAnim = fairyAnimations[0];
 const { actions, mixer } = useAnimations([fairyAnim], fairy);
 let currentAction = actions.idle;
@@ -31,6 +50,9 @@ const onClick = (intersection, pointerEvent) => {
 
   emit('fairyClicked', fairyPosition);
 };
+
+
+
 </script>
 
 <template>
@@ -38,8 +60,11 @@ const onClick = (intersection, pointerEvent) => {
     @click="onClick"
     ref="sphereRef"
     :position="fairyPosition"
+   
     :args="[1, 10, 10]"
   >
-    <primitive ref="fairyRef" :object="fairy" :scale="[0.2, 0.2, 0.2]" />
+  
   </Sphere>
+  <primitive ref="pointsRef" :object="points"></primitive>
+
 </template>

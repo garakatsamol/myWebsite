@@ -18,6 +18,7 @@ const {
   nodes,
   scene: knight,
   animations,
+  materials,
 } = await useGLTF('src/assets/fairy__the_legend_of_zelda_botw/scene.gltf', {
   draco: true,
 });
@@ -30,10 +31,10 @@ const fairyRef = ref(null)
 const fairyRef1 = ref(null)
 const sphereRef = ref(null)
 onMounted(() => {
-  
+ 
   if (fairyRef.value && fairyRef1.value) {
     const boundingContainer= sphereRef.value
-  console.log('fairyObject', boundingContainer);
+   
     //const fairyObjects = ref<Object3D<Event>[]>([fairyRef.value.object, fairyRef1.value.object]);
 
     //const raycaster = useRaycaster(fairyObjects, context);
@@ -65,7 +66,7 @@ let currentColor = '#008080'
 const onClick = (intersection, pointerEvent) => {
   let newColor = currentColor == '#FFFFFF' ? '#008080' : '#FFFFFF'
   
-
+  console.log('materials', mixer1)
   intersection.object.material.color.set(newColor)
 
   currentColor = newColor
@@ -95,9 +96,6 @@ const onClick = (intersection, pointerEvent) => {
   <Sphere @click="onClick" ref="sphereRef" :position="[2, 3, -1]" :args="[1, 10, 10]">
   <primitive   ref="fairyRef1" :object="fairy1"  :scale="[0.2, 0.2, 0.2]" />
 </Sphere>
-  <Box :args="[1, 1, 1]" position="[-2, 2, 0]" color="orange" />
-  <TresMesh @click="onClick">
-    <TresBoxGeometry :args="[1, 1, 1]" />
-    <TresMeshToonMaterial color="#008080" />
-  </TresMesh>
+
+
 </template>

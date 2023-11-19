@@ -14,7 +14,6 @@ import {
   Smoke,
 } from '@tresjs/cientos';
 import gsap from 'gsap';
-import PointsFairy from './PointsFairy.vue';
 const state = reactive({
   clearColor: '#201919',
   shadows: true,
@@ -34,24 +33,13 @@ watchEffect(() => {
   }
 });
 
-
 const {
   nodes,
-  materials,
   scene: knight,
   animations,
-} = await useGLTF('src/assets/fairy__the_legend_of_zelda_botw/scene.gltf', { //src/assets/fairyNoMaterial/fairyNoMaterial
+} = await useGLTF('src/assets/fairy__the_legend_of_zelda_botw/scene.gltf', {
   draco: true,
-
 });
-/* materials.fairy_navi.wireframe=true
-materials.fairy_wings.wireframe=true */
-//const pMaterial=new PointsMaterial( { color: "#ff0000", opacity:0.5, transparent:true, size:0.5, sizeAttenuation:false, vertexColors:true })
-//delete materials[""]
-//console.log(materials)
-//materials.fairy_wings=pMaterial
-//materials.fairy_navi=pMaterial
-
 
 const moveCamera = (fairyPosition: Vector3) => {
   let newCameraPosition = menuClicked ? cameraIdlePosition : fairyPosition;
@@ -68,26 +56,42 @@ const moveCamera = (fairyPosition: Vector3) => {
 
 <template>
   <TresCanvas ref="canvasRef" preset="realistic" v-bind="state">
-    <!-- <MouseParallax :ease="1" :factor="1" /> -->
+    <MouseParallax :ease="1" :factor="1" />
 
     <TresPerspectiveCamera ref="cameraRef" :position="cameraIdlePosition" />
-       <OrbitControls ref="orbitRef" />
+    <!--    <OrbitControls ref="orbitRef" /> -->
 
     <TresGroup :position="[0, 0, 0]">
-      <!-- <Stars /> -->
+      <Stars />
       <Suspense>
-        <PointsFairy
+        <SingleFairy
           :fairyNodes="nodes"
           :fairyScene="knight"
           :fairyAnimations="animations"
           :fairyPosition="[0, 3, 1]"
-          :fairyMaterials="materials"
           @fairyClicked="moveCamera"
         />
       </Suspense>
-      
+      <Suspense>
+        <SingleFairy
+          @fairyClicked="moveCamera"
+          :fairyNodes="nodes"
+          :fairyScene="knight"
+          :fairyAnimations="animations"
+          :fairyPosition="[-2, -3, -0]"
+        />
+      </Suspense>
+      <Suspense>
+        <SingleFairy
+          @fairyClicked="moveCamera"
+          :fairyNodes="nodes"
+          :fairyScene="knight"
+          :fairyAnimations="animations"
+          :fairyPosition="[2, 1, -1]"
+        />
+      </Suspense>
     </TresGroup>
-    <TresAmbientLight :intensity="1" :color="0xffffff" />
+    <TresAmbientLight :intensity="0.1" :color="0xffffff" />
 
     <TresDirectionalLight
       :position="[0, 1, 10]"
