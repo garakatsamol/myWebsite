@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Ref, onMounted, ref, watch, watchEffect } from 'vue';
+import { Ref, nextTick, onMounted, ref, watch, watchEffect } from 'vue';
 import { TresCanvas, useRenderLoop, useTexture, useTresContext, useTresContextProvider    } from '@tresjs/core';
 import { PointsMaterial, PointsMaterialParameters } from 'three/src/materials/PointsMaterial.js';
 import { Points } from 'three/src/objects/Points.js';
@@ -14,7 +14,7 @@ import {
     Stars,
     Smoke,
     Sky,
-    
+    Sphere,
 } from '@tresjs/cientos';
 import { DynamicDrawUsage, RepeatWrapping, SRGBColorSpace, AdditiveBlending, Vector3,Plane} from 'three';
 
@@ -31,10 +31,10 @@ const dotTexture = await useTexture(["./src/assets/water/blueDot.png"])
 
 //renderer.localClippingEnabled = true;
 const clipPlanes = [
-				new Plane( new Vector3( 1 ,0,0 ), 0 ),
-				
-			];
-let context;
+new Plane( new Vector3( 1 ,0,0 ), 0 ),
+ 
+   
+];
 
 
 
@@ -44,9 +44,8 @@ watchEffect(() => {
         
         const position = planeRef.value.attributes.position;        
         const positionPoints = planePointsRef.value.attributes.position;
-        position.usage = DynamicDrawUsage;
-        positionPoints.usage = DynamicDrawUsage;
-       
+       position.usage = DynamicDrawUsage;
+       positionPoints.usage = DynamicDrawUsage;
         for (let i = 0; i < position.count; i++) {
 
             const y = 0//35 * Math.sin(i / 2);
@@ -62,19 +61,18 @@ watchEffect(() => {
             texture.wrapT = RepeatWrapping;
             texture.repeat.set(15, 15);
             texture.colorSpace = SRGBColorSpace;
-          //  console.log(materialPointsRef.value)
+      
             materialRef.value.map = texture
            
            
-            materialRef.value.clippingPlanes = clipPlanes;
-            materialRef.value.clipIntersection = false;
 
-         
+           
+           
             dotTexture.colorSpace = SRGBColorSpace;
             materialPointsRef.value.map=dotTexture
             console.log( materialRef.value)
             
-
+        
 
          
         }
@@ -114,22 +112,25 @@ const { onLoop } = useRenderLoop()
 </script>
 
 <template>
-    <TresCanvas :clearColor="0xaaccff"  :localClippingEnabled="true" >
+    <TresCanvas  :localClippingEnabled="true" >
         <!-- <MouseParallax :ease="1" :factor="1" /> -->
 
         <TresPerspectiveCamera :position="[100, 380, 250]" :look-at="[0,0, 0]" />
         <!-- <TresFog :args="['#aaccff', 0.0007]" /> -->
         <OrbitControls />
         <!-- <Sky/> -->
-        
+        <Sphere :position="[0, 100, 0]" :args="[100, 100, 100]" >
+            <TresMeshBasicMaterial :color="0x00ff00"  :clippingPlanes="clipPlanes"/>
+            </Sphere>
       
-        <TresMesh :visible="true">
+        <TresMesh :visible="false">
             <TresPlaneGeometry    ref="planeRef" :args="[20000, 20000, worldWidth - 1, worldDepth - 1]" :rotateX="(- Math.PI / 2)"/>
-            <TresMeshBasicMaterial  ref="materialRef" :color="0x0044ff" > //// Here i also tried with :clippingPlanes = "clipPlanes" :clipIntersection="false"
-         
+            <TresMeshBasicMaterial  ref="materialRef" :color="0x0044ff" :clippingPlanes = "clipPlanes" :clipIntersection="false" :clipShadows="true"> //// Here i also tried with :clippingPlanes = "clipPlanes" :clipIntersection="false"
+        
             </TresMeshBasicMaterial>
         </TresMesh>
-         <TresPoints  >
+       
+         <TresPoints :visible="false" >
             <TresPlaneGeometry ref="planePointsRef" :args="[20000, 20000, worldWidth - 1, worldDepth - 1]"
             :rotateX="(- Math.PI / 2)" />
             <TresPointsMaterial ref="materialPointsRef" 
@@ -145,7 +146,7 @@ const { onLoop } = useRenderLoop()
 
         
         <TresAxesHelper />
-        <TresPlaneHelper :args="[clipPlanes[0], 1000, 0xff0000]" />  
+        <TresPlaneHelper :args="[clipPlanes[0], 10000, 0xff0000]" /> 
         <TresGridHelper :args="[100, 100, 0x444444, 'teal']" />
     </TresCanvas>
 </template>
